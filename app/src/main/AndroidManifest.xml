@@ -3,7 +3,7 @@
     package="com.kla.paybuddy" >
 
     <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc.hce" android:required="true" />
+   <uses-feature android:name="android.hardware.nfc.hce" android:required="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
