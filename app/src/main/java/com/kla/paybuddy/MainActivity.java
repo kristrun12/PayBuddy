@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import static java.security.AccessController.getContext;
+
 
 public class MainActivity extends ActionBarActivity implements CardReader.AccountCallback{
 
@@ -54,12 +56,10 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
 
                 accountText.setText(message);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
+                new ForwardToken(getContext()).execute("https://kortagleypir.herokuapp.com/token", message);
                 CardTransaction trans = new CardTransaction(account, new Random().nextInt(10000));
 
-               // Firebase myFirebaseRef = new Firebase("https://kortagleypir.firebaseio.com/transactions");
 
-               // myFirebaseRef.push().setValue(trans);
 
 
             }

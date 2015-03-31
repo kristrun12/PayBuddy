@@ -1,13 +1,23 @@
 package com.kla.paybuddy;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
+import android.provider.Settings;
 import android.util.Log;
+import android.content.Context;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
+
+import static java.security.AccessController.getContext;
+
 
 /**
  * Created by kla on 20.2.2015.
@@ -67,6 +77,10 @@ public class CardReader implements NfcAdapter.ReaderCallback{
                 if (Arrays.equals(SELECT_OK_SW, statusWord)) {
                     String accountNumber = new String(payload, "UTF-8");
                     mAccountCallback.get().onAccountReceived(accountNumber);
+
+
+
+
                 }else
                 {
                     Log.d(TAG, "Length "+resultLength);
@@ -81,6 +95,8 @@ public class CardReader implements NfcAdapter.ReaderCallback{
 
         }
     }
+
+
 
 
     /**
