@@ -2,6 +2,7 @@ package com.kla.paybuddy;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 //import com.google.gson.Gson;
 
@@ -62,7 +63,7 @@ public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
 
             }
         } else {
-            //editAccountName.setText("Misheppnuð skráning ahahahah!");
+            //Toast.makeText(appContext, "Eitthvað klikkaði", Toast.LENGTH_LONG);
         }
 
     }
@@ -106,11 +107,18 @@ public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
             String responseMessage = conn.getResponseMessage();
             System.out.println("The response message is: " + responseMessage);
 
+            if(response == 200) {
 
-            // Convert the InputStream into a string
-            is = conn.getInputStream();
-            //System.out.println(is.available());
-            ret = readJSON(is, 5000);
+                // Convert the InputStream into a string
+                is = conn.getInputStream();
+                //System.out.println(is.available());
+
+                ret = readJSON(is, 5000);
+            }
+            else
+            {
+                ret = new JSONObject();
+            }
             try {
                 ret.put("responseCode", response);
                 ret.put("sentMessage", msg);

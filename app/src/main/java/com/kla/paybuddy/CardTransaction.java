@@ -10,13 +10,65 @@ import java.util.Date;
 public class CardTransaction
 {
     private Date date = new Date();
-    private String accountNumber;
-    private Number amount;
+    private int price;
+    private String tokenitem;
+    private int device_id;
+    private String appPin;
+    private String posPin;
 
-    public CardTransaction(String accountNumber, Number amount) {
-        this.accountNumber = accountNumber;
-        this.amount = amount;
+    public String getVendor() {
+        return vendor;
     }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
+    }
+
+    private String vendor;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(int device_id) {
+        this.device_id = device_id;
+    }
+
+    public String getAppPin() {
+        return appPin;
+    }
+
+    public void setAppPin(String appPin) {
+        this.appPin = appPin;
+    }
+
+    public String getPosPin() {
+        return posPin;
+    }
+
+    public void setPosPin(String posPin) {
+        this.posPin = posPin;
+    }
+
+
+
+    public String getTokenitem() {
+        return tokenitem;
+    }
+
+    public void setTokenitem(String tokenitem) {
+        this.tokenitem = tokenitem;
+    }
+
+
     public Date getDate() {
         return date;
     }
@@ -24,23 +76,5 @@ public class CardTransaction
     public void setDate(Date date) {
         this.date = date;
     }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public Number getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Number amount) {
-        this.amount = amount;
-    }
-
-
 
 }

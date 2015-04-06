@@ -2,6 +2,7 @@ package com.kla.paybuddy;
 
 import android.app.Activity;
 import android.nfc.NfcAdapter;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -17,7 +21,7 @@ import java.util.Random;
 import static java.security.AccessController.getContext;
 
 
-public class MainActivity extends ActionBarActivity implements CardReader.AccountCallback{
+public class MainActivity extends ActionBarActivity implements CardReader.AccountCallback {
 
     private static final String TAG = "MainActivity";
     private CardReader mCardReader;
@@ -52,20 +56,48 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
             public void run() {
                 String ts = new SimpleDateFormat("HH:mm:ss.ssss").format(new Date());
 
-                String message = ts+": "+account;
+                String message = ts + ": " + account;
 
-                accountText.setText(message);
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                new ForwardToken(getContext()).execute("https://kortagleypir.herokuapp.com/token", message);
-                CardTransaction trans = new CardTransaction(account, new Random().nextInt(10000));
+                //String stringToPost = account;
+                String stringToSend = stringToSend(account);
 
 
+                accountText.setText(stringToSend);
+                Toast.makeText(getApplicationContext(), stringToSend, Toast.LENGTH_LONG).show();
+                new ForwardToken(getContext()).execute("https://kortagleypir.herokuapp.com/transaction", stringToSend);
+                //CardTransaction trans = new CardTransaction(account, new Random().nextInt(10000));
 
 
             }
         });
     }
 
+    private String stringToSend(String account)
+    {
+        CardTransaction trans = new CardTransaction();
+        JSONObject outMsg = new JSONObject();
+        String ts = new SimpleDateFormat("HH:mm:ss.ssss").format(new Date());
+
+        try {
+
+            JSONObject jObject = new JSONObject(account);
+            String appPin = jObject.getString("appPin");
+            String tokenitem = jObject.getString("tokenitem");
+            String device_id = jObject.getString("device_id");
+            outMsg.put("tokenitem",tokenitem);
+            outMsg.put("appPin",appPin);
+            outMsg.put("device_id",device_id);
+            outMsg.put("price",new Random().nextInt(50000)+100);
+            outMsg.put("vendor","Bonus");
+            outMsg.put("posPin",4567);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return outMsg.toString();
+
+    }
     @Override
     public void onPause() {
         super.onPause();
@@ -122,4 +154,5 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
 
         return super.onOptionsItemSelected(item);
     }
+
 }
