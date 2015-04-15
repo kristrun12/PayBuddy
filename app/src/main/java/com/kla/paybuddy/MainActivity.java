@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,14 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
     private CardReader mCardReader;
 
     private TextView accountText;
+    private int currentPrice;
+    private String theVendor;
+    private int currentPin;
+
+    final private String [] first = {"AktuTaktu", "Ísbúð Vesturbæjar","Sjoppan", "Bónus video","Snæland video"};
+    final private String [] second = {"Hamborgarafabrikkan", "Búllan","Askur", "Saffran","Eldsmiðjan","N-1"};
+    final private String [] third = {"Bónus", "Kostur","Krónana", "Fjarðakaup","Nettó", "Vero moda", "Jack and Jones"};
+    final private String [] fourth = {"Ikea", "Húsgagnahöllin","Ilva", "Knastás","Örninn"};
 
     // Recommend NfcAdapter flags for reading from other Android devices. Indicates that this
     // activity is interested in NFC-A devices (including other Android devices), and that the
@@ -34,17 +44,22 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
     public static int READER_FLAGS =
             NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        accountText = (TextView) findViewById(R.id.theText);
+        accountText = (TextView) findViewById(R.id.editPrice);
+
+        //EditText editPin = (EditText) findViewById(R.id.editPrice);
+        //String cardPin = editPin.getText().toString();
 
         mCardReader = new CardReader(this);
         Log.d(TAG, "Creating view");
         // Disable Android Beam and register our card reader callback
         enableReaderMode();
+
     }
 
     @Override
@@ -67,14 +82,13 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
                 new ForwardToken(getContext()).execute("https://kortagleypir.herokuapp.com/transaction", stringToSend);
                 //CardTransaction trans = new CardTransaction(account, new Random().nextInt(10000));
 
-
             }
         });
     }
 
     private String stringToSend(String account)
     {
-        CardTransaction trans = new CardTransaction();
+        //CardTransaction trans = new CardTransaction();
         JSONObject outMsg = new JSONObject();
         String ts = new SimpleDateFormat("HH:mm:ss.ssss").format(new Date());
 
@@ -87,9 +101,9 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
             outMsg.put("tokenitem",tokenitem);
             outMsg.put("appPin",appPin);
             outMsg.put("device_id",device_id);
-            outMsg.put("price",new Random().nextInt(50000)+100);
-            outMsg.put("vendor","Bonus");
-            outMsg.put("posPin",4567);
+            outMsg.put("price",currentPrice);
+            outMsg.put("vendor",theVendor);
+            outMsg.put("posPin",1235);
 
 
         } catch (JSONException e) {
@@ -108,6 +122,7 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
     public void onResume() {
         super.onResume();
         enableReaderMode();
+
     }
 
     private void enableReaderMode() {
@@ -155,4 +170,32 @@ public class MainActivity extends ActionBarActivity implements CardReader.Accoun
         return super.onOptionsItemSelected(item);
     }
 
+    public void priceChanged(View view) {
+
+        EditText price = (EditText) findViewById(R.id.editPrice);
+        Toast.makeText(getApplicationContext(), price.toString(), Toast.LENGTH_LONG).show();
+        currentPrice = Integer.valueOf(price.getText().toString());
+        Log.d("MAIN", "Price is "+currentPrice);
+        Random random = new Random();
+
+        if(currentPrice < 5000)
+        {
+            int index = random.nextInt(first.length);
+            theVendor = first[index];
+        }
+        else if (currentPrice > 5000 && currentPrice < 15000)
+        {
+            int index = random.nextInt(second.length);
+            theVendor = second[index];
+        }
+        else if (currentPrice > 15000 && currentPrice < 50000)
+        {
+            int index = random.nextInt(third.length);
+            theVendor = third[index];
+        }
+        else{
+            int index = random.nextInt(fourth.length);
+            theVendor = fourth[index];
+        }
+    }
 }
