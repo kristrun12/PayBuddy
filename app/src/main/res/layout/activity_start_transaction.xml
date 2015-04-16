@@ -8,15 +8,60 @@
 
     <TextView android:text="Leggðu símann að posanum til að framkvæma greiðslu"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/textView" />
+
+    <TableLayout
+        android:layout_marginTop="40dip"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/textView"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true">
+
+        <TableRow
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView android:text="Söluaðili: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:gravity="right"
+                android:id="@+id/labelVendor" />
+            <TextView android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:id="@+id/textVendor" />
+        </TableRow>
+        <TableRow
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView android:text="Upphæð: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:gravity="right"
+                android:id="@+id/labelAmount" />
+            <TextView android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:id="@+id/textAmount" />
+        </TableRow>
+    </TableLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Ljúka"
         android:id="@+id/finish"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="finishTransaction" />
+
+
 
 </RelativeLayout>

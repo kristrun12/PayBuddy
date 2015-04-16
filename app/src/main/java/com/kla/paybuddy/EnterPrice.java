@@ -49,20 +49,20 @@ public class EnterPrice extends ActionBarActivity {
 
 
 
-        transaction.setCurrentPrice(enterdPrice);
-        Log.d("MAIN", "Price is " + transaction.getCurrentPrice());
+        transaction.setPrice(enterdPrice);
+        Log.d("MAIN", "Price is " + transaction.getPrice());
         Random random = new Random();
 
-        if(transaction.getCurrentPrice() < 5000)
+        if(transaction.getPrice() < 5000)
         {
             int index = random.nextInt(first.length);
             transaction.setTheVendor(first[index]);
         }
-        else if (transaction.getCurrentPrice() > 5000 && transaction.getCurrentPrice() < 15000)
+        else if (transaction.getPrice() > 5000 && transaction.getPrice() < 15000)
         {
             int index = random.nextInt(second.length);
             transaction.setTheVendor(second[index]);        }
-        else if (transaction.getCurrentPrice() > 15000 && transaction.getCurrentPrice() < 50000)
+        else if (transaction.getPrice() > 15000 && transaction.getPrice() < 50000)
         {
             int index = random.nextInt(third.length);
             transaction.setTheVendor(third[index]);        }
@@ -71,7 +71,7 @@ public class EnterPrice extends ActionBarActivity {
             transaction.setTheVendor(fourth[index]);        }
 
         Intent intent = null;
-        if(transaction.getCurrentPrice() > 5000)
+        if(transaction.getPrice() > 5000)
         {
              intent = new Intent(this, EnterPin.class);
         }

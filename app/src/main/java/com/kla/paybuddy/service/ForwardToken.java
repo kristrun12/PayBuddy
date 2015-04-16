@@ -7,6 +7,9 @@ import android.widget.Toast;
 //import com.google.gson.Gson;
 
 
+import com.kla.paybuddy.data.TransactionResult;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -22,16 +25,24 @@ import java.security.AccessControlContext;
 /**
  * Created by kla on 31.3.2015.
  */
-public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
+public class ForwardToken extends AsyncTask <String, Void, TransactionResult> {
 
+    final static String ForwardTokenTAG = "ForwardTokenTag";
     private Exception exception;
     final private AccessControlContext appContext;
-    public ForwardToken(AccessControlContext appContext) {
+    private AsyncTaskCompleteListener<TransactionResult> listener;
+
+
+
+
+    public ForwardToken(AccessControlContext appContext, AsyncTaskCompleteListener<TransactionResult> listener) {
+
         this.appContext = appContext;
+        this.listener = listener;
     }
 
     @Override
-    protected JSONObject doInBackground(String... params) {
+    protected TransactionResult doInBackground(String... params) {
 
         try {
             // params comes from the execute() call: params[0] is the url.
@@ -45,9 +56,14 @@ public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
     }
     // onPostExecute displays the results of the AsyncTask.
     @Override
-    protected void onPostExecute(JSONObject result) {
+    protected void onPostExecute(TransactionResult result) {
+
+        if(listener !=  null)
+        {
+            listener.onTaskComplete(result);
+        }
         //textView.setText(result);
-        int rCode = result.optInt("responseCode");
+        /*int rCode = result.optInt("responseCode");
 
         if (rCode == 200) {
             try {
@@ -64,15 +80,17 @@ public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
             }
         } else {
             //Toast.makeText(appContext, "Eitthvað klikkaði", Toast.LENGTH_LONG);
-        }
+            Log.d("response",result.optString("errorCode"));
+        }*/
 
     }
-    private JSONObject postUrl(String serviceURL, String json_accountInfo) throws IOException {
+
+    private TransactionResult postUrl(String serviceURL, String json_accountInfo) throws IOException {
         InputStream is = null;
 
         // Remake json-string into json object. There has to be a smarter way to do this, but I cant pass a string and json object
         JSONObject msg = new JSONObject();
-        JSONObject ret = null;
+        TransactionResult ret = new TransactionResult();
         try {
             msg = new JSONObject(json_accountInfo);
         } catch (Exception e) {
@@ -97,36 +115,24 @@ public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
             OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
 
             osw.write(msg.toString());
-            System.out.println(msg.toString());
             osw.flush();
             osw.close();
-            // The service will respond with a JSON string of its own.
-            int response = conn.getResponseCode();
-            //Log.d( "The response is: " + response);
-            System.out.println("The response code is: " + response);
-            String responseMessage = conn.getResponseMessage();
-            System.out.println("The response message is: " + responseMessage);
 
-            if(response == 200) {
+            //handle the result
+            ret.setResultCode(conn.getResponseCode());
+            ret.setResultMessage(conn.getResponseMessage());
 
-                // Convert the InputStream into a string
+
+
+            if(ret.getResultCode() == 200)
+            {
                 is = conn.getInputStream();
-                //System.out.println(is.available());
-
-                ret = readJSON(is, 5000);
             }
             else
             {
-                ret = new JSONObject();
+                is = conn.getErrorStream();
             }
-            try {
-                ret.put("responseCode", response);
-                ret.put("sentMessage", msg);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
+            ret.setResultContent(readInput(is, conn.getContentLength()));
         } finally {
             if (is != null) {
                 is.close();
@@ -134,14 +140,26 @@ public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
         }
         return ret;
     }
-    // Reads an InputStream and converts it to a JSONObject.
-    public JSONObject readJSON(InputStream stream, int len) throws IOException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
 
-        String msg = new String(buffer);
+    private String readInput(final InputStream stream, int length)
+    {
+        try{
+            Reader reader = null;
+            reader = new InputStreamReader(stream, "UTF-8");
+            char[] buffer = new char[length];
+            reader.read(buffer);
+            return new String(buffer);
+        }catch(Exception ex)
+        {
+            return "";
+        }
+    }
+
+
+    // Reads an InputStream and converts it to a JSONObject.
+  /*  private JSONObject readJSON(InputStream stream, int len) throws IOException {
+
+        String msg = readInput(stream, len);
         JSONObject ret = new JSONObject();
         try {
             ret = new JSONObject(msg);
@@ -149,5 +167,5 @@ public class ForwardToken extends AsyncTask <String, Void, JSONObject> {
             e.printStackTrace();
         }
         return ret;
-    }
+    }*/
 }

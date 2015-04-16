@@ -17,12 +17,6 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
 
 
-   /* private CardReader mCardReader;
-    private int currentPrice;
-    private String theVendor;
-    private int currentPin;*/
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

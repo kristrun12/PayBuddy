@@ -10,7 +10,7 @@ import java.util.Date;
 public class CardTransaction
 {
     private Date date = new Date();
-    private int currentPrice;
+    private int price;
     private String tokenitem;
     private int device_id;
     private String appPin;
@@ -26,12 +26,12 @@ public class CardTransaction
 
     private String theVendor;
 
-    public int getCurrentPrice() {
-        return currentPrice;
+    public int getPrice() {
+        return price;
     }
 
-    public void setCurrentPrice(int currentPrice) {
-        this.currentPrice = currentPrice;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public int getDevice_id() {
