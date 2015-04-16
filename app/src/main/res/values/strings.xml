@@ -4,5 +4,11 @@
     <string name="app_name">PayBuddy</string>
     <string name="action_settings">Stillingar</string>
     <string name="price">Verð</string>
+    <string name="pin">PIN</string>
+    <string name="title_activity_enter_price">EnterPrice</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_enter_pin">EnterPin</string>
+    <string name="title_activity_start_transaction">StartTransaction</string>
 
 </resources>

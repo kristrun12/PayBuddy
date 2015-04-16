@@ -1,4 +1,4 @@
-package com.kla.paybuddy;
+package com.kla.paybuddy.data;
 
 import android.support.annotation.XmlRes;
 
@@ -10,28 +10,28 @@ import java.util.Date;
 public class CardTransaction
 {
     private Date date = new Date();
-    private int price;
+    private int currentPrice;
     private String tokenitem;
     private int device_id;
     private String appPin;
     private String posPin;
 
-    public String getVendor() {
-        return vendor;
+    public String getTheVendor() {
+        return theVendor;
     }
 
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
+    public void setTheVendor(String theVendor) {
+        this.theVendor = theVendor;
     }
 
-    private String vendor;
+    private String theVendor;
 
-    public int getPrice() {
-        return price;
+    public int getCurrentPrice() {
+        return currentPrice;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setCurrentPrice(int currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public int getDevice_id() {

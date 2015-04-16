@@ -1,22 +1,13 @@
-package com.kla.paybuddy;
+package com.kla.paybuddy.service;
 
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
-import android.provider.Settings;
 import android.util.Log;
-import android.content.Context;
-import android.widget.Toast;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
-
-import static java.security.AccessController.getContext;
 
 
 /**

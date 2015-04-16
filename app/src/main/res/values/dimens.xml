@@ -4,5 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="inputblock_vertical_margin">8dp</dimen>
     <dimen name="inputblock_horzontal_margin">4dp</dimen>
-    <dimen name="price">100sp</dimen>
+    <dimen name="price">50sp</dimen>
+    <dimen name="pin">50sp</dimen>
+
+
 </resources>

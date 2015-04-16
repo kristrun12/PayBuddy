@@ -1,201 +1,42 @@
 package com.kla.paybuddy;
 
-import android.app.Activity;
-import android.nfc.NfcAdapter;
-import android.provider.Settings;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
-
-import static java.security.AccessController.getContext;
+import com.kla.paybuddy.data.CardTransaction;
+import com.kla.paybuddy.service.CardReader;
 
 
-public class MainActivity extends ActionBarActivity implements CardReader.AccountCallback {
+public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
-    private CardReader mCardReader;
 
-    private TextView accountText;
+
+   /* private CardReader mCardReader;
     private int currentPrice;
     private String theVendor;
-    private int currentPin;
-
-    final private String [] first = {"AktuTaktu", "Ísbúð Vesturbæjar","Sjoppan", "Bónus video","Snæland video"};
-    final private String [] second = {"Hamborgarafabrikkan", "Búllan","Askur", "Saffran","Eldsmiðjan","N-1"};
-    final private String [] third = {"Bónus", "Kostur","Krónana", "Fjarðakaup","Nettó", "Vero moda", "Jack and Jones"};
-    final private String [] fourth = {"Ikea", "Húsgagnahöllin","Ilva", "Knastás","Örninn"};
-
-    // Recommend NfcAdapter flags for reading from other Android devices. Indicates that this
-    // activity is interested in NFC-A devices (including other Android devices), and that the
-    // system should not check for the presence of NDEF-formatted data (e.g. Android Beam).
-    public static int READER_FLAGS =
-            NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK;
+    private int currentPin;*/
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        accountText = (TextView) findViewById(R.id.editPrice);
-
-        //EditText editPin = (EditText) findViewById(R.id.editPrice);
-        //String cardPin = editPin.getText().toString();
-
-        mCardReader = new CardReader(this);
-        Log.d(TAG, "Creating view");
-        // Disable Android Beam and register our card reader callback
-        enableReaderMode();
-
     }
-
-    @Override
-    public void onAccountReceived(final String account) {
-        Log.d(TAG, "Account was received " + account);
-
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                String ts = new SimpleDateFormat("HH:mm:ss.ssss").format(new Date());
-
-                String message = ts + ": " + account;
-
-                //String stringToPost = account;
-                String stringToSend = stringToSend(account);
-
-
-                accountText.setText(stringToSend);
-                Toast.makeText(getApplicationContext(), stringToSend, Toast.LENGTH_LONG).show();
-                new ForwardToken(getContext()).execute("https://kortagleypir.herokuapp.com/transaction", stringToSend);
-                //CardTransaction trans = new CardTransaction(account, new Random().nextInt(10000));
-
-            }
-        });
-    }
-
-    private String stringToSend(String account)
+/*
+ * Start new round. open activity to enter the price
+ */
+    public void startSale(View view)
     {
-        //CardTransaction trans = new CardTransaction();
-        JSONObject outMsg = new JSONObject();
-        String ts = new SimpleDateFormat("HH:mm:ss.ssss").format(new Date());
 
-        try {
+        Intent intent = new Intent(this, EnterPrice.class);
 
-            JSONObject jObject = new JSONObject(account);
-            String appPin = jObject.getString("appPin");
-            String tokenitem = jObject.getString("tokenitem");
-            String device_id = jObject.getString("device_id");
-            outMsg.put("tokenitem",tokenitem);
-            outMsg.put("appPin",appPin);
-            outMsg.put("device_id",device_id);
-            outMsg.put("price",currentPrice);
-            outMsg.put("vendor",theVendor);
-            outMsg.put("posPin",1235);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return outMsg.toString();
-
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        disableReaderMode();
+        startActivity(intent);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        enableReaderMode();
-
-    }
-
-    private void enableReaderMode() {
-        Log.i(TAG, "Enabling reader mode");
-        Activity activity = this;
-        NfcAdapter nfc = NfcAdapter.getDefaultAdapter(activity);
-        if (nfc != null) {
-
-            nfc.enableReaderMode(activity, mCardReader, READER_FLAGS, null);
-            Log.i(TAG, "Reader Mode ON");
-        }
-    }
-
-    private void disableReaderMode() {
-        Log.i(TAG, "Disabling reader mode");
-        Activity activity = this;
-        NfcAdapter nfc = NfcAdapter.getDefaultAdapter(activity);
-        if (nfc != null) {
-            nfc.disableReaderMode(activity);
-        }
-    }
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void priceChanged(View view) {
-
-        EditText price = (EditText) findViewById(R.id.editPrice);
-        Toast.makeText(getApplicationContext(), price.toString(), Toast.LENGTH_LONG).show();
-        currentPrice = Integer.valueOf(price.getText().toString());
-        Log.d("MAIN", "Price is "+currentPrice);
-        Random random = new Random();
-
-        if(currentPrice < 5000)
-        {
-            int index = random.nextInt(first.length);
-            theVendor = first[index];
-        }
-        else if (currentPrice > 5000 && currentPrice < 15000)
-        {
-            int index = random.nextInt(second.length);
-            theVendor = second[index];
-        }
-        else if (currentPrice > 15000 && currentPrice < 50000)
-        {
-            int index = random.nextInt(third.length);
-            theVendor = third[index];
-        }
-        else{
-            int index = random.nextInt(fourth.length);
-            theVendor = fourth[index];
-        }
-    }
 }
