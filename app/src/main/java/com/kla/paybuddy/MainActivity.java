@@ -3,13 +3,8 @@ package com.kla.paybuddy;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.kla.paybuddy.data.CardTransaction;
-import com.kla.paybuddy.service.CardReader;
 
 
 public class MainActivity extends ActionBarActivity {

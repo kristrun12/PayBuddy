@@ -4,9 +4,11 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.security.AccessControlContext;
 import java.util.Arrays;
 
 
@@ -16,7 +18,7 @@ import java.util.Arrays;
 public class CardReader implements NfcAdapter.ReaderCallback{
 
     private static final String TAG = CardReader.class.getSimpleName();
-
+    //final private AccessControlContext appContext;
     // AID for our loyalty card service.
 
     //private static final String SAMPLE_LOYALTY_CARD_AID = "325041592E5359532E4444463031";
@@ -35,7 +37,10 @@ public class CardReader implements NfcAdapter.ReaderCallback{
 
     public interface AccountCallback {
         public void onAccountReceived(String account);
+        public void onAccountError(String msg);
     }
+
+
     public CardReader(AccountCallback callback) {
         mAccountCallback = new WeakReference<AccountCallback>(callback);
     }
@@ -76,12 +81,16 @@ public class CardReader implements NfcAdapter.ReaderCallback{
                 {
                     Log.d(TAG, "Length "+resultLength);
                     Log.d(TAG, "Strange payload "+new String(payload, "UTF-8")+" "+ByteArrayToHexString(statusWord));
+                    mAccountCallback.get().onAccountError("Fékk ekkert Token!");
                 }
 
 
 
             } catch (IOException e) {
                 Log.e(TAG, "Error communicating with card: " + e.toString());
+                mAccountCallback.get().onAccountError("Villa við að lesa Token!");
+
+
             }
 
         }

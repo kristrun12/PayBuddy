@@ -1,15 +1,6 @@
 package com.kla.paybuddy.service;
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
-
-//import com.google.gson.Gson;
-
-
 import com.kla.paybuddy.data.TransactionResult;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -31,8 +22,6 @@ public class ForwardToken extends AsyncTask <String, Void, TransactionResult> {
     private Exception exception;
     final private AccessControlContext appContext;
     private AsyncTaskCompleteListener<TransactionResult> listener;
-
-
 
 
     public ForwardToken(AccessControlContext appContext, AsyncTaskCompleteListener<TransactionResult> listener) {

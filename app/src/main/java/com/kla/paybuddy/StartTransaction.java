@@ -5,12 +5,9 @@ import android.nfc.NfcAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.kla.paybuddy.data.CardTransaction;
 import com.kla.paybuddy.data.TransactionResult;
@@ -20,10 +17,6 @@ import com.kla.paybuddy.service.ForwardToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.Executor;
 
 import static java.security.AccessController.getContext;
 
@@ -79,8 +72,6 @@ public class StartTransaction extends ActionBarActivity implements CardReader.Ac
         {
             Toast.makeText(this,result.getResultContent(),Toast.LENGTH_LONG).show();
         }
-
-
     }
 
     @Override
@@ -88,17 +79,32 @@ public class StartTransaction extends ActionBarActivity implements CardReader.Ac
         Log.d(TAG, "Account was received " + account);
 
         final AsyncTaskCompleteListener<TransactionResult> listener = this;
-
+        final Activity ctx = this;
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
                 String stringToSend = stringToSend(account);
+                //Toast.makeText(ctx,stringToSend,Toast.LENGTH_LONG).show();
                 ForwardToken fwToken = new ForwardToken(getContext(), listener);
                 fwToken.execute("https://kortagleypir.herokuapp.com/transaction", stringToSend);
 
             }
         });
+    }
+
+    @Override
+    public void onAccountError(final String msg)
+    {
+        final Activity ctx = this;
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ctx,msg,Toast.LENGTH_LONG).show();
+               
+            }
+        });
+
     }
 
     @Override
@@ -148,7 +154,6 @@ public class StartTransaction extends ActionBarActivity implements CardReader.Ac
         CardTransaction transaction = getTransaction();
 
         JSONObject outMsg = new JSONObject();
-       // String ts = new SimpleDateFormat("HH:mm:ss.ssss").format(new Date());
 
         try {
 
