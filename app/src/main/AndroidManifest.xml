@@ -18,8 +18,9 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop" >
->
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,15 +30,18 @@
         </activity>
         <activity
             android:name=".EnterPrice"
-            android:label="@string/title_activity_enter_price" >
+            android:label="@string/title_activity_enter_price"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".EnterPin"
-            android:label="@string/title_activity_enter_pin" >
+            android:label="@string/title_activity_enter_pin"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".StartTransaction"
-            android:label="@string/title_activity_start_transaction" >
+            android:label="@string/title_activity_start_transaction"
+            android:screenOrientation="portrait">
 
             <!--
                  NFC-related intent filter. Allows application to handle messages from any

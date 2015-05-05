@@ -85,7 +85,7 @@ public class StartTransaction extends ActionBarActivity implements CardReader.Ac
             public void run() {
 
                 String stringToSend = stringToSend(account);
-                //Toast.makeText(ctx,stringToSend,Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx,stringToSend,Toast.LENGTH_LONG).show();
                 ForwardToken fwToken = new ForwardToken(getContext(), listener);
                 fwToken.execute("https://kortagleypir.herokuapp.com/transaction", stringToSend);
 
